@@ -17,9 +17,15 @@ export type PaginatedProducts = {
   totalPages: number
 }
 
-export async function getProducts(page: number, limit: number) {
+export async function getProducts(params: {
+  page: number
+  limit: number
+  search?: string
+  sortBy?: "createdAt" | "price" | "name"
+  sortOrder?: "asc" | "desc"
+}) {
   const response = await api.get<PaginatedProducts>("/products", {
-    params: { page, limit },
+    params,
   })
   return response.data
 }

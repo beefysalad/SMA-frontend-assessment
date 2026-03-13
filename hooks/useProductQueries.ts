@@ -10,13 +10,18 @@ import {
 } from "@/lib/services/products"
 
 export function useProductsQuery(
-  page: number,
-  limit: number,
+  params: {
+    page: number
+    limit: number
+    search?: string
+    sortBy?: "createdAt" | "price" | "name"
+    sortOrder?: "asc" | "desc"
+  },
   enabled: boolean
 ) {
   return useQuery<PaginatedProducts, Error>({
-    queryKey: ["products", page, limit],
-    queryFn: () => getProducts(page, limit),
+    queryKey: ["products", params],
+    queryFn: () => getProducts(params),
     enabled,
     placeholderData: (previous) => previous,
   })

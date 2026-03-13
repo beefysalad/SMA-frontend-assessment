@@ -11,6 +11,7 @@ import {
   useDeleteProductMutation,
   useProductsQuery,
 } from "@/hooks/useProductQueries"
+import useDebounce from "@/hooks/useDebounce"
 import type { Product } from "@/lib/services/products"
 import { useAuthStore } from "@/store/authStore"
 import { useState } from "react"
@@ -22,9 +23,43 @@ export default function ProductsPage() {
 
   const [page, setPage] = useState<number>(1)
   const LIMIT = 10
+  const [search, setSearch] = useState<string>("")
+  const debouncedSearch = useDebounce(search, 350)
+  const [sortBy, setSortBy] = useState<"createdAt" | "price" | "name">(
+    "createdAt"
+  )
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
 
-  const productsQuery = useProductsQuery(page, LIMIT, authStore.isAuthenticated)
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value)
+    setPage(1)
+  }
+
+  const handleSortByChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSortBy(event.target.value as "createdAt" | "price" | "name")
+    setPage(1)
+  }
+
+  const handleSortOrderChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSortOrder(event.target.value as "asc" | "desc")
+    setPage(1)
+  }
+
+  const productsQuery = useProductsQuery(
+    {
+      page,
+      limit: LIMIT,
+      search: debouncedSearch.trim() ? debouncedSearch.trim() : undefined,
+      sortBy,
+      sortOrder,
+    },
+    authStore.isAuthenticated
+  )
   const products = productsQuery.data?.data || []
   const totalPages = productsQuery.data?.totalPages || 1
 
@@ -42,6 +77,37 @@ export default function ProductsPage() {
             </a>
           }
         />
+
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <div className="min-w-[220px] flex-1">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={handleSearchChange}
+              className="h-9 w-full rounded-xl border border-border bg-background px-3 text-sm transition outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              value={sortBy}
+              onChange={handleSortByChange}
+              className="h-9 rounded-xl border border-border bg-background px-3 text-sm"
+            >
+              <option value="createdAt">Newest</option>
+              <option value="price">Price</option>
+              <option value="name">Name</option>
+            </select>
+            <select
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              className="h-9 rounded-xl border border-border bg-background px-3 text-sm"
+            >
+              <option value="desc">Desc</option>
+              <option value="asc">Asc</option>
+            </select>
+          </div>
+        </div>
 
         {deleteTarget && (
           <DeleteProductModal
