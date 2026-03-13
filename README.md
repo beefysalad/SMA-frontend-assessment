@@ -1,21 +1,60 @@
-# Next.js template
+# Product Management System (Frontend
 
-This is a Next.js template with shadcn/ui.
+React + TypeScript frontend for the SMA Assessment ofr a Product Management System. Built with TanStack Query, Axios, Zod, and React Hook Form.
 
-## Adding components
+## Tech Stack
 
-To add components to your app, run the following command:
+- React + TypeScript (Next.js App Router)
+- TanStack Query for async state
+- Zustand (forminimal auth store)
+- Axios for API calls
+- Zod + React Hook Form for validation
+- Tailwind CSS for styling
+
+## Prerequisites
+
+- Node.js 18++
+- Backend running on `http://localhost:8080`
+
+## Installation
 
 ```bash
-npx shadcn@latest add button
+npm install
 ```
 
-This will place the ui components in the `components` directory.
+## Environment Variables
 
-## Using components
+Create `.env.local` (or use `.env.example` as a starting point):
 
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
 ```
+NEXT_PUBLIC_API_BASE_URL="http://localhost:8080"
+```
+
+## How to Run
+
+```bash
+npm run dev
+```
+
+App runs on `http://localhost:3000`.
+
+## Pages and Routes
+
+- `/` → redirects to `/signin`
+- `/signin` → Sign in page
+- `/signup` → Sign up page
+- `/products` → Protected products page (placeholder UI for now)
+
+## State Management
+
+TanStack Query handles async data (loading, error, retries). A nd then i have minimal Zustand store keeps auth state in memory + localStorage:
+
+- `authStore` → `user`, `isAuthenticated`
+
+## Folder Structure
+
+- `app/` → routes and pages
+- `components/` → shared UI components
+- `hooks/` → TanStack hooks
+- `lib/` → API client, services, schemas
+- `store/` → Zustand auth store
