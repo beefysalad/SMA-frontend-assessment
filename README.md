@@ -1,4 +1,4 @@
-# Product Management System (Frontend
+# Product Management System (Frontend)
 
 React + TypeScript frontend for the SMA Assessment ofr a Product Management System. Built with TanStack Query, Axios, Zod, and React Hook Form.
 
@@ -43,18 +43,32 @@ App runs on `http://localhost:3000`.
 - `/` → redirects to `/signin`
 - `/signin` → Sign in page
 - `/signup` → Sign up page
-- `/products` → Protected products page (placeholder UI for now)
+- `/products` → Product list (protected)
+- `/products/new` → Create product
+- `/products/:id` → Product details
+- `/products/:id/edit` → Edit product
 
 ## State Management
 
-TanStack Query handles async data (loading, error, retries). A nd then i have minimal Zustand store keeps auth state in memory + localStorage:
+TanStack Query handles async data (loading, error, retries). A minimal Zustand store keeps auth state in memory + localStorage:
 
 - `authStore` → `user`, `isAuthenticated`
+
+## API Integration
+
+API calls are separated from UI:
+
+- `lib/api.ts` → Axios client (base URL + `/api` prefix)
+- `lib/services/*` → auth/product calls
+- `hooks/useAuthMutations.ts` → auth mutations
+- `hooks/useProductQueries.ts` → product queries/mutations
+- `lib/schemas/*` → Zod schemas
 
 ## Folder Structure
 
 - `app/` → routes and pages
 - `components/` → shared UI components
+- `components/products/` → product-specific UI components
 - `hooks/` → TanStack hooks
 - `lib/` → API client, services, schemas
 - `store/` → Zustand auth store
