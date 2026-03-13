@@ -10,7 +10,6 @@ import {
   useSignInMutation,
   getAuthErrorMessage,
 } from "@/hooks/useAuthMutations"
-import AuthGuard from "@/components/AuthGuard"
 import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth"
 
 export default function SignInPage() {
@@ -50,10 +49,9 @@ export default function SignInPage() {
   }
 
   return (
-    <AuthGuard requireAuth={false} redirectTo="/products">
-      <main className="min-h-screen bg-background">
-        <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-12">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-12">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
             <div className="mb-8 space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
             </div>
@@ -117,9 +115,8 @@ export default function SignInPage() {
                 Create one
               </Link>
             </div>
-          </div>
         </div>
-      </main>
-    </AuthGuard>
+      </div>
+    </main>
   )
 }

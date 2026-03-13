@@ -1,6 +1,5 @@
 "use client"
 
-import AuthGuard from "@/components/AuthGuard"
 import {
   getAuthErrorMessage,
   useSignUpMutation,
@@ -48,10 +47,9 @@ export default function SignUpPage() {
   }
 
   return (
-    <AuthGuard requireAuth={false} redirectTo="/products">
-      <main className="min-h-screen bg-background">
-        <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-12">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-12">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
             <div className="mb-8 space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight">Sign up</h1>
             </div>
@@ -132,9 +130,8 @@ export default function SignUpPage() {
                 Sign in
               </Link>
             </div>
-          </div>
         </div>
-      </main>
-    </AuthGuard>
+      </div>
+    </main>
   )
 }

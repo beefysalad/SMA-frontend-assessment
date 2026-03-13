@@ -1,4 +1,4 @@
-import { z } from "@/lib/validation"
+import { z } from "zod"
 
 export const signInSchema = z.object({
   email: z.string().email("Enter a valid email"),

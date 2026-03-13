@@ -32,7 +32,7 @@ export async function getProductById(id: number) {
 export async function createProduct(data: {
   name: string
   price: number
-  description?: string
+  description?: string | null
 }) {
   const response = await api.post<Product>("/products", data)
   return response.data
@@ -43,7 +43,7 @@ export async function updateProduct(
   data: {
     name?: string
     price?: number
-    description?: string
+    description?: string | null
   }
 ) {
   const response = await api.put<Product>(`/products/${id}`, data)

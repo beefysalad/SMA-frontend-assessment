@@ -1,14 +1,34 @@
 "use client"
 
-import * as React from "react"
-import AuthGuard from "@/components/AuthGuard"
+import { useState } from "react"
+import Card from "@/components/products/Card"
+import PageHeader from "@/components/products/PageHeader"
+import ActionPill, { getActionPillClass } from "@/components/products/ActionPill"
+import StatusMessage from "@/components/products/StatusMessage"
+import DeleteProductModal from "@/components/products/DeleteProductModal"
 import { useAuthStore } from "@/store/authStore"
-import { useLogoutMutation, getAuthErrorMessage } from "@/hooks/useAuthMutations"
+import {
+  useLogoutMutation,
+  getAuthErrorMessage,
+} from "@/hooks/useAuthMutations"
+import {
+  useProductsQuery,
+  useDeleteProductMutation,
+} from "@/hooks/useProductQueries"
+import type { Product } from "@/lib/services/products"
 
 export default function ProductsPage() {
   const authStore = useAuthStore()
   const logoutMutation = useLogoutMutation()
-  const [logoutError, setLogoutError] = React.useState<string | null>(null)
+  const deleteMutation = useDeleteProductMutation()
+  const [logoutError, setLogoutError] = useState<string | null>(null)
+  const [page, setPage] = useState<number>(1)
+  const LIMIT = 10
+  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
+
+  const productsQuery = useProductsQuery(page, LIMIT, authStore.isAuthenticated)
+  const products = productsQuery.data?.data || []
+  const totalPages = productsQuery.data?.totalPages || 1
 
   const handleLogout = () => {
     setLogoutError(null)
@@ -24,28 +44,136 @@ export default function ProductsPage() {
   }
 
   return (
-    <AuthGuard requireAuth redirectTo="/signin">
-      <main className="min-h-screen bg-background px-6 py-10">
-        <div className="mx-auto max-w-4xl">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold">Products</h1>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="h-9 rounded-xl border border-border px-4 text-sm font-medium transition hover:bg-muted"
-              disabled={logoutMutation.isPending}
+    <main className="py-4">
+      <div className="mx-auto max-w-4xl">
+        <PageHeader
+          title="Products"
+          actions={
+            <a
+              href="/products/new"
+              className="inline-flex h-9 items-center rounded-xl border border-border px-4 text-sm font-medium transition hover:bg-muted"
             >
-              {logoutMutation.isPending ? "Signing out..." : "Sign out"}
-            </button>
-          </div>
-          {logoutError && (
-            <p className="mt-2 text-sm text-destructive">{logoutError}</p>
+              Add product
+            </a>
+          }
+        />
+        {logoutError && (
+          <p className="mt-2 text-sm text-destructive">{logoutError}</p>
+        )}
+
+          {deleteTarget && (
+            <DeleteProductModal
+              product={deleteTarget}
+              onCancel={() => setDeleteTarget(null)}
+              onConfirm={(id) => {
+                deleteMutation.mutate(id, {
+                  onSuccess: () => setDeleteTarget(null),
+                })
+              }}
+            />
           )}
-          <p className="mt-2 text-sm text-muted-foreground">
-            Product list UI will go here next.
-          </p>
-        </div>
-      </main>
-    </AuthGuard>
+
+        <Card className="mt-6 overflow-hidden">
+          <div className="border-b border-border px-5 py-4 text-sm font-semibold">
+            Product list
+          </div>
+          {productsQuery.isLoading && (
+            <div className="px-5 py-8">
+              <StatusMessage variant="loading" message="Loading products..." />
+            </div>
+          )}
+          {productsQuery.isError && (
+            <div className="px-5 py-8">
+              <StatusMessage
+                variant="error"
+                message="Failed to load products."
+              />
+            </div>
+          )}
+          {!productsQuery.isLoading && productsQuery.data && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-muted/40 text-xs text-muted-foreground uppercase">
+                  <tr>
+                    <th className="px-5 py-3">Name</th>
+                    <th className="px-5 py-3">Price</th>
+                    <th className="px-5 py-3">Description</th>
+                    <th className="px-5 py-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr
+                      key={product.id}
+                      className="border-b border-border transition hover:bg-muted/40"
+                    >
+                      <td className="px-5 py-4 font-medium">{product.name}</td>
+                      <td className="px-5 py-4">
+                        PHP {Number(product.price).toFixed(2)}
+                      </td>
+                      <td className="px-5 py-4 text-muted-foreground">
+                        {product.description || "-"}
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <div className="flex justify-end gap-2">
+                          <a href={`/products/${product.id}`}>
+                            <span className={getActionPillClass()}>View</span>
+                          </a>
+                          <a href={`/products/${product.id}/edit`}>
+                            <span className={getActionPillClass()}>Edit</span>
+                          </a>
+                          <ActionPill
+                            type="button"
+                            variant="danger"
+                            onClick={() => {
+                              setDeleteTarget(product)
+                            }}
+                          >
+                            Delete
+                          </ActionPill>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {products.length === 0 && (
+                <div className="px-5 py-8 text-sm text-muted-foreground">
+                  No products yet.
+                </div>
+              )}
+            </div>
+          )}
+        </Card>
+
+        {productsQuery.data && (
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">
+              Page {productsQuery.data.page} of {productsQuery.data.totalPages}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1 || productsQuery.isFetching}
+                className="h-9 rounded-xl border border-border px-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={page >= totalPages || productsQuery.isFetching}
+                className="h-9 rounded-xl border border-border px-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
   )
 }
