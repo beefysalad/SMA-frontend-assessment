@@ -38,6 +38,7 @@ export default function SignInPage() {
     signInMutation.mutate(values, {
       onSuccess: (data) => {
         authStore.setUser(data.user)
+        authStore.setToken(data.token || null)
         setSuccessMessage("Signed in successfully.")
         setSubmitError(null)
         router.push("/products")

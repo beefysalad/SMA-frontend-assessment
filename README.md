@@ -72,6 +72,9 @@ TanStack Query handles async data (loading, error, retries). A minimal Zustand s
 
 - `authStore` → `user`, `isAuthenticated`
 
+**Auth token note (security):**
+The backend issues a JWT and sets it as an httpOnly cookie to reduce XSS risk. The frontend also stores the token in Zustand and sends it as a Bearer header when present, enabling both cookie-based and header-based authentication flows.
+
 ## API Integration
 
 API calls are separated from UI:
