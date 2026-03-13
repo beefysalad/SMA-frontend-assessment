@@ -8,7 +8,7 @@ function isPublicRoute(pathname: string) {
 }
 
 function isProtectedRoute(pathname: string) {
-  return pathname.startsWith("/products")
+  return pathname.startsWith("/products") || pathname.startsWith("/profile")
 }
 
 export function proxy(request: NextRequest) {

@@ -64,6 +64,7 @@ For smaller seeds, use the protected UI at `/products/seed` (max 5,000 per reque
 - `/products/new` → Create product
 - `/products/:id` → Product details
 - `/products/:id/edit` → Edit product
+- `/profile` → Update profile (protected)
 
 ## State Management
 

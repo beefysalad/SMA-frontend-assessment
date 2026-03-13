@@ -4,6 +4,7 @@ import {
   login as loginRequest,
   signUp as signUpRequest,
   logout as logoutRequest,
+  updateProfile as updateProfileRequest,
 } from "@/lib/services/auth"
 
 type ErrorResponse = { message?: string }
@@ -25,6 +26,13 @@ export function useSignUpMutation() {
 export function useLogoutMutation() {
   return useMutation({
     mutationFn: () => logoutRequest(),
+  })
+}
+
+export function useUpdateProfileMutation() {
+  return useMutation({
+    mutationFn: (payload: { name?: string; password?: string }) =>
+      updateProfileRequest(payload),
   })
 }
 

@@ -2,6 +2,7 @@ import { api } from "@/lib/api"
 
 export type AuthUser = {
   id: string
+  name: string
   email: string
 }
 
@@ -34,5 +35,13 @@ export async function signUp(name: string, email: string, password: string) {
 
 export async function logout() {
   const response = await api.post<{ message: string }>("/auth/logout")
+  return response.data
+}
+
+export async function updateProfile(payload: {
+  name?: string
+  password?: string
+}) {
+  const response = await api.put<AuthResponse>("/auth/profile", payload)
   return response.data
 }
