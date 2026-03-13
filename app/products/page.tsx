@@ -1,27 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import ActionPill, {
+  getActionPillClass,
+} from "@/components/products/ActionPill"
 import Card from "@/components/products/Card"
-import PageHeader from "@/components/products/PageHeader"
-import ActionPill, { getActionPillClass } from "@/components/products/ActionPill"
-import StatusMessage from "@/components/products/StatusMessage"
 import DeleteProductModal from "@/components/products/DeleteProductModal"
-import { useAuthStore } from "@/store/authStore"
+import PageHeader from "@/components/products/PageHeader"
+import StatusMessage from "@/components/products/StatusMessage"
 import {
-  useLogoutMutation,
-  getAuthErrorMessage,
-} from "@/hooks/useAuthMutations"
-import {
-  useProductsQuery,
   useDeleteProductMutation,
+  useProductsQuery,
 } from "@/hooks/useProductQueries"
 import type { Product } from "@/lib/services/products"
+import { useAuthStore } from "@/store/authStore"
+import { useState } from "react"
 
 export default function ProductsPage() {
   const authStore = useAuthStore()
-  const logoutMutation = useLogoutMutation()
+
   const deleteMutation = useDeleteProductMutation()
-  const [logoutError, setLogoutError] = useState<string | null>(null)
+
   const [page, setPage] = useState<number>(1)
   const LIMIT = 10
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
@@ -29,19 +27,6 @@ export default function ProductsPage() {
   const productsQuery = useProductsQuery(page, LIMIT, authStore.isAuthenticated)
   const products = productsQuery.data?.data || []
   const totalPages = productsQuery.data?.totalPages || 1
-
-  const handleLogout = () => {
-    setLogoutError(null)
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        authStore.clearUser()
-        window.location.href = "/signin"
-      },
-      onError: (error) => {
-        setLogoutError(getAuthErrorMessage(error, "Logout failed."))
-      },
-    })
-  }
 
   return (
     <main className="py-4">
@@ -57,21 +42,18 @@ export default function ProductsPage() {
             </a>
           }
         />
-        {logoutError && (
-          <p className="mt-2 text-sm text-destructive">{logoutError}</p>
-        )}
 
-          {deleteTarget && (
-            <DeleteProductModal
-              product={deleteTarget}
-              onCancel={() => setDeleteTarget(null)}
-              onConfirm={(id) => {
-                deleteMutation.mutate(id, {
-                  onSuccess: () => setDeleteTarget(null),
-                })
-              }}
-            />
-          )}
+        {deleteTarget && (
+          <DeleteProductModal
+            product={deleteTarget}
+            onCancel={() => setDeleteTarget(null)}
+            onConfirm={(id) => {
+              deleteMutation.mutate(id, {
+                onSuccess: () => setDeleteTarget(null),
+              })
+            }}
+          />
+        )}
 
         <Card className="mt-6 overflow-hidden">
           <div className="border-b border-border px-5 py-4 text-sm font-semibold">
