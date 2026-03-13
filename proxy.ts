@@ -13,6 +13,17 @@ function isProtectedRoute(pathname: string) {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+  if (apiBaseUrl) {
+    try {
+      const apiOrigin = new URL(apiBaseUrl).origin
+      if (apiOrigin !== request.nextUrl.origin) {
+        return NextResponse.next()
+      }
+    } catch {
+    
+    }
+  }
   const token = request.cookies.get("token")?.value
   const isAuthed = Boolean(token)
 

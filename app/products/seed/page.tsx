@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useSeedProductsMutation } from "@/hooks/useProductQueries"
+import Spinner from "@/components/ui/spinner"
+import Link from "next/link"
 
 const seedSchema = z.object({
   count: z.number().min(1, "Minimum is 1").max(5000, "Maximum is 5000"),
@@ -32,7 +34,7 @@ export default function ProductSeedPage() {
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
               Catalog
             </p>
             <h1 className="mt-2 text-2xl font-semibold">Seed products</h1>
@@ -40,12 +42,12 @@ export default function ProductSeedPage() {
               Create dummy products for testing. Max 5000 per request.
             </p>
           </div>
-          <a
+          <Link
             href="/products"
             className="text-sm font-medium underline-offset-4 hover:underline"
           >
             Back
-          </a>
+          </Link>
         </div>
 
         <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
@@ -73,17 +75,24 @@ export default function ProductSeedPage() {
               className="h-10 rounded-xl border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90"
               disabled={seedMutation.isPending}
             >
-              {seedMutation.isPending ? "Seeding..." : "Seed"}
+              {seedMutation.isPending ? (
+                <span className="flex items-center gap-2">
+                  <Spinner className="h-4 w-4 border-background/40 border-t-background" />
+                  Seeding...
+                </span>
+              ) : (
+                "Seed"
+              )}
             </button>
           </form>
 
           {errors.count?.message && (
-            <p className="mt-2 text-sm text-foreground font-medium">
+            <p className="mt-2 text-sm font-medium text-foreground">
               {errors.count.message}
             </p>
           )}
           {submitError && (
-            <p className="mt-2 text-sm text-foreground font-medium">
+            <p className="mt-2 text-sm font-medium text-foreground">
               {submitError}
             </p>
           )}

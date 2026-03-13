@@ -3,6 +3,8 @@
 import { useParams } from "next/navigation"
 import ProductForm from "@/components/products/ProductForm"
 import StatusMessage from "@/components/products/StatusMessage"
+import { Skeleton } from "@/components/ui/skeleton"
+import Spinner from "@/components/ui/spinner"
 import { useProductQuery } from "@/hooks/useProductQueries"
 
 export default function ProductEditPage() {
@@ -33,11 +35,18 @@ export default function ProductEditPage() {
         </div>
 
         {productQuery.isLoading && (
-          <StatusMessage
-            variant="loading"
-            message="Loading product..."
-            className="mt-4"
-          />
+          <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Spinner className="h-4 w-4" />
+              Loading product...
+            </div>
+            <div className="mt-4 space-y-3">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-24 w-full" />
+            </div>
+          </div>
         )}
         {productQuery.isError && (
           <StatusMessage

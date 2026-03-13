@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { profileSchema, type ProfileFormValues } from "@/lib/schemas/profile"
 import { useUpdateProfileMutation, getAuthErrorMessage } from "@/hooks/useAuthMutations"
 import { useAuthStore } from "@/store/authStore"
+import Spinner from "@/components/ui/spinner"
 
 export default function ProfilePage() {
   const authStore = useAuthStore()
@@ -152,7 +153,14 @@ export default function ProfilePage() {
                 className="h-10 rounded-xl border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90"
                 disabled={updateMutation.isPending}
               >
-                {updateMutation.isPending ? "Saving..." : "Save changes"}
+                {updateMutation.isPending ? (
+                  <span className="flex items-center gap-2">
+                    <Spinner className="h-4 w-4 border-background/40 border-t-background" />
+                    Saving...
+                  </span>
+                ) : (
+                  "Save changes"
+                )}
               </button>
             </div>
           </form>

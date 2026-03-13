@@ -5,16 +5,39 @@ import {
   useSignUpMutation,
 } from "@/hooks/useAuthMutations"
 import { signUpSchema, type SignUpFormValues } from "@/lib/schemas/auth"
+import { useAuthStore } from "@/store/authStore"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import Spinner from "@/components/ui/spinner"
 
 export default function SignUpPage() {
   const router = useRouter()
+  const authStore = useAuthStore()
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    if (useAuthStore.persist?.hasHydrated()) {
+      setHydrated(true)
+      return
+    }
+    const unsubscribe = useAuthStore.persist?.onFinishHydration?.(() => {
+      setHydrated(true)
+    })
+    return () => {
+      unsubscribe?.()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (hydrated && authStore.isAuthenticated) {
+      router.replace("/products")
+    }
+  }, [hydrated, authStore.isAuthenticated, router])
 
   const {
     register,
@@ -125,7 +148,14 @@ export default function SignUpPage() {
               disabled={signUpMutation.isPending}
               className="h-11 w-full rounded-xl border border-foreground bg-foreground text-sm font-medium text-background transition hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {signUpMutation.isPending ? "Creating..." : "Create account"}
+              {signUpMutation.isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Spinner className="h-4 w-4 border-background/40 border-t-background" />
+                  Creating...
+                </span>
+              ) : (
+                "Create account"
+              )}
             </button>
           </form>
 

@@ -7,6 +7,7 @@ import Card from "@/components/products/Card"
 import DeleteProductModal from "@/components/products/DeleteProductModal"
 import PageHeader from "@/components/products/PageHeader"
 import StatusMessage from "@/components/products/StatusMessage"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   useDeleteProductMutation,
   useProductsQuery,
@@ -15,6 +16,7 @@ import useDebounce from "@/hooks/useDebounce"
 import type { Product } from "@/lib/services/products"
 import { useAuthStore } from "@/store/authStore"
 import { useState } from "react"
+import Link from "next/link"
 
 export default function ProductsPage() {
   const authStore = useAuthStore()
@@ -36,9 +38,7 @@ export default function ProductsPage() {
     setPage(1)
   }
 
-  const handleSortByChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleSortByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(event.target.value as "createdAt" | "price" | "name")
     setPage(1)
   }
@@ -70,12 +70,12 @@ export default function ProductsPage() {
           title="Products"
           subtitle="Manage, sort, and review your catalog."
           actions={
-            <a
+            <Link
               href="/products/new"
               className="inline-flex h-10 items-center rounded-xl border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
               Add product
-            </a>
+            </Link>
           }
         />
 
@@ -129,8 +129,26 @@ export default function ProductsPage() {
             Product list
           </div>
           {productsQuery.isLoading && (
-            <div className="px-5 py-8">
-              <StatusMessage variant="loading" message="Loading products..." />
+            <div className="px-5 py-6">
+              <div className="mt-2 space-y-3">
+                <div className="grid grid-cols-4 gap-4">
+                  <Skeleton className="col-span-1 h-4" />
+                  <Skeleton className="col-span-1 h-4" />
+                  <Skeleton className="col-span-1 h-4" />
+                  <Skeleton className="col-span-1 h-4" />
+                </div>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <div
+                    key={`product-skeleton-${index}`}
+                    className="grid grid-cols-4 gap-4"
+                  >
+                    <Skeleton className="col-span-1 h-4" />
+                    <Skeleton className="col-span-1 h-4" />
+                    <Skeleton className="col-span-1 h-4" />
+                    <Skeleton className="col-span-1 h-4" />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           {productsQuery.isError && (

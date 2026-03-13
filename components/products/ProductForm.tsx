@@ -9,6 +9,7 @@ import {
   useUpdateProductMutation,
 } from "@/hooks/useProductQueries"
 import type { Product } from "@/lib/services/products"
+import Spinner from "@/components/ui/spinner"
 
 type ProductFormProps = {
   product?: Product | null
@@ -115,13 +116,23 @@ export default function ProductForm({
           disabled={createMutation.isPending || updateMutation.isPending}
           className="h-10 rounded-lg border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isEdit
-            ? updateMutation.isPending
-              ? "Saving..."
-              : "Save"
-            : createMutation.isPending
-              ? "Creating..."
-              : "Create"}
+          {isEdit ? (
+            updateMutation.isPending ? (
+              <span className="flex items-center gap-2">
+                <Spinner className="h-4 w-4 border-background/40 border-t-background" />
+                Saving...
+              </span>
+            ) : (
+              "Save"
+            )
+          ) : createMutation.isPending ? (
+            <span className="flex items-center gap-2">
+              <Spinner className="h-4 w-4 border-background/40 border-t-background" />
+              Creating...
+            </span>
+          ) : (
+            "Create"
+          )}
         </button>
         <button
           type="button"

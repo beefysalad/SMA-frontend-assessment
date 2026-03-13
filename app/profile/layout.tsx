@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import AppSidebar from "@/components/AppSidebar"
+import AuthGuard from "@/components/AuthGuard"
 import {
   Sidebar,
   SidebarInset,
@@ -11,17 +12,19 @@ import {
 export default function ProfileLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon" variant="inset">
-        <AppSidebar />
-        <SidebarRail />
-      </Sidebar>
-      <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b border-border px-6">
-          <SidebarTrigger />
-          <div className="text-sm font-semibold">Profile</div>
-        </header>
-        <div className="flex-1 px-6 py-6">{children}</div>
-      </SidebarInset>
+      <AuthGuard>
+        <Sidebar collapsible="icon" variant="inset">
+          <AppSidebar />
+          <SidebarRail />
+        </Sidebar>
+        <SidebarInset>
+          <header className="flex h-14 items-center gap-2 border-b border-border px-6">
+            <SidebarTrigger />
+            <div className="text-sm font-semibold">Profile</div>
+          </header>
+          <div className="flex-1 px-6 py-6">{children}</div>
+        </SidebarInset>
+      </AuthGuard>
     </SidebarProvider>
   )
 }
