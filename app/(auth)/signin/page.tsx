@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
@@ -16,10 +16,8 @@ import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth"
 export default function SignInPage() {
   const authStore = useAuthStore()
   const router = useRouter()
-  const [submitError, setSubmitError] = React.useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(
-    null
-  )
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const {
     register,

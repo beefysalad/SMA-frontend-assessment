@@ -1,25 +1,21 @@
 "use client"
 
-import * as React from "react"
+import AuthGuard from "@/components/AuthGuard"
+import {
+  getAuthErrorMessage,
+  useSignUpMutation,
+} from "@/hooks/useAuthMutations"
+import { signUpSchema, type SignUpFormValues } from "@/lib/schemas/auth"
+import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  useSignUpMutation,
-  getAuthErrorMessage,
-} from "@/hooks/useAuthMutations"
-import { useAuthStore } from "@/store/authStore"
-import AuthGuard from "@/components/AuthGuard"
-import { signUpSchema, type SignUpFormValues } from "@/lib/schemas/auth"
 
 export default function SignUpPage() {
-  const authStore = useAuthStore()
   const router = useRouter()
-  const [submitError, setSubmitError] = React.useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(
-    null
-  )
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const {
     register,
