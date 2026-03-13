@@ -6,7 +6,7 @@ React + TypeScript frontend for the SMA assessment Product Management System. Bu
 
 - React + TypeScript (Next.js App Router)
 - TanStack Query for async state
-- Zustand (forminimal auth store)
+- Zustand (minimal auth store)
 - Axios for API calls
 - Zod + React Hook Form for validation
 - Tailwind CSS for styling
@@ -21,6 +21,8 @@ React + TypeScript frontend for the SMA assessment Product Management System. Bu
 Clone the repository and install dependencies:
 
 ```bash
+git clone https://github.com/beefysalad/SMA-frontend-assessment.git
+cd SMA-frontend-assessment
 npm install
 ```
 
@@ -47,7 +49,7 @@ App runs on `http://localhost:3000`.
 For large seed data (50,000 products), run the backend seed script:
 
 ```bash
-cd backend
+cd SMA-backend-assessment
 npm run seed
 ```
 
