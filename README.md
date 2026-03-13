@@ -1,5 +1,7 @@
 # Product Management System (Frontend)
 
+Submitted and created by John Patrick Ryan Mandal.
+
 React + TypeScript frontend for the SMA assessment Product Management System. Built with TanStack Query, Axios, Zod, and React Hook Form.
 
 ## Tech Stack
