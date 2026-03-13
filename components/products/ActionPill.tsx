@@ -9,7 +9,7 @@ export function getActionPillClass(variant: "default" | "danger" = "default") {
     "rounded-full border px-3 py-1 text-xs font-semibold transition"
   const styles =
     variant === "danger"
-      ? "border-destructive/40 bg-background text-destructive hover:border-destructive hover:bg-destructive/10"
+      ? "border-foreground/30 bg-background text-foreground hover:border-foreground hover:bg-foreground hover:text-background"
       : "border-border bg-background text-foreground/80 hover:border-foreground/30 hover:text-foreground"
   return `${base} ${styles}`
 }

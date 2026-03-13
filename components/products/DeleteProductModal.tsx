@@ -35,7 +35,7 @@ export default function DeleteProductModal({
           <button
             type="button"
             onClick={() => onConfirm(product.id)}
-            className="h-9 rounded-lg bg-destructive px-4 text-sm font-semibold text-white transition hover:opacity-90"
+            className="h-9 rounded-lg border border-foreground bg-foreground px-4 text-sm font-semibold text-background transition hover:bg-foreground/90"
           >
             Delete
           </button>

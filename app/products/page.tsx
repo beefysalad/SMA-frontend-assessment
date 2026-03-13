@@ -64,50 +64,53 @@ export default function ProductsPage() {
   const totalPages = productsQuery.data?.totalPages || 1
 
   return (
-    <main className="py-4">
-      <div className="mx-auto max-w-4xl">
+    <main className="py-8">
+      <div className="mx-auto max-w-5xl px-4">
         <PageHeader
           title="Products"
+          subtitle="Manage, sort, and review your catalog."
           actions={
             <a
               href="/products/new"
-              className="inline-flex h-9 items-center rounded-xl border border-border px-4 text-sm font-medium transition hover:bg-muted"
+              className="inline-flex h-10 items-center rounded-xl border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
               Add product
             </a>
           }
         />
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <div className="min-w-[220px] flex-1">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={search}
-              onChange={handleSearchChange}
-              className="h-9 w-full rounded-xl border border-border bg-background px-3 text-sm transition outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
-            />
+        <Card className="mt-6 p-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="min-w-[220px] flex-1">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={search}
+                onChange={handleSearchChange}
+                className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <select
+                value={sortBy}
+                onChange={handleSortByChange}
+                className="h-10 rounded-xl border border-border bg-background px-3 text-sm"
+              >
+                <option value="createdAt">Newest</option>
+                <option value="price">Price</option>
+                <option value="name">Name</option>
+              </select>
+              <select
+                value={sortOrder}
+                onChange={handleSortOrderChange}
+                className="h-10 rounded-xl border border-border bg-background px-3 text-sm"
+              >
+                <option value="desc">Desc</option>
+                <option value="asc">Asc</option>
+              </select>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <select
-              value={sortBy}
-              onChange={handleSortByChange}
-              className="h-9 rounded-xl border border-border bg-background px-3 text-sm"
-            >
-              <option value="createdAt">Newest</option>
-              <option value="price">Price</option>
-              <option value="name">Name</option>
-            </select>
-            <select
-              value={sortOrder}
-              onChange={handleSortOrderChange}
-              className="h-9 rounded-xl border border-border bg-background px-3 text-sm"
-            >
-              <option value="desc">Desc</option>
-              <option value="asc">Asc</option>
-            </select>
-          </div>
-        </div>
+        </Card>
 
         {deleteTarget && (
           <DeleteProductModal
@@ -141,7 +144,7 @@ export default function ProductsPage() {
           {!productsQuery.isLoading && productsQuery.data && (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="bg-muted/40 text-xs text-muted-foreground uppercase">
+                <thead className="bg-muted/30 text-xs text-muted-foreground uppercase">
                   <tr>
                     <th className="px-5 py-3">Name</th>
                     <th className="px-5 py-3">Price</th>
@@ -153,7 +156,7 @@ export default function ProductsPage() {
                   {products.map((product) => (
                     <tr
                       key={product.id}
-                      className="border-b border-border transition hover:bg-muted/40"
+                      className="border-b border-border transition hover:bg-muted/30"
                     >
                       <td className="px-5 py-4 font-medium">{product.name}</td>
                       <td className="px-5 py-4">
@@ -204,7 +207,7 @@ export default function ProductsPage() {
                 type="button"
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                 disabled={page === 1 || productsQuery.isFetching}
-                className="h-9 rounded-xl border border-border px-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                className="h-9 rounded-xl border border-border px-3 text-sm transition hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Previous
               </button>
@@ -214,7 +217,7 @@ export default function ProductsPage() {
                   setPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={page >= totalPages || productsQuery.isFetching}
-                className="h-9 rounded-xl border border-border px-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                className="h-9 rounded-xl border border-border px-3 text-sm transition hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Next
               </button>

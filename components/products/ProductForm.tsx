@@ -70,10 +70,10 @@ export default function ProductForm({
           id="name"
           type="text"
           {...register("name")}
-          className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm transition outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
+          className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
         />
         {errors.name?.message && (
-          <p className="text-xs text-destructive">
+          <p className="text-xs text-foreground font-medium">
             {getMessage(errors.name.message)}
           </p>
         )}
@@ -87,10 +87,10 @@ export default function ProductForm({
           type="number"
           step="0.01"
           {...register("price", { valueAsNumber: true })}
-          className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm transition outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
+          className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
         />
         {errors.price?.message && (
-          <p className="text-xs text-destructive">
+          <p className="text-xs text-foreground font-medium">
             {getMessage(errors.price.message)}
           </p>
         )}
@@ -103,15 +103,17 @@ export default function ProductForm({
           id="description"
           rows={3}
           {...register("description")}
-          className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm transition outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
         />
       </div>
-      {submitError && <p className="text-sm text-destructive">{submitError}</p>}
+      {submitError && (
+        <p className="text-sm text-foreground font-medium">{submitError}</p>
+      )}
       <div className="flex gap-2">
         <button
           type="submit"
           disabled={createMutation.isPending || updateMutation.isPending}
-          className="h-10 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-10 rounded-lg border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isEdit
             ? updateMutation.isPending

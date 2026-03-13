@@ -28,22 +28,29 @@ export default function ProductSeedPage() {
   })
 
   return (
-    <main className="py-4">
-      <div className="mx-auto max-w-4xl">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Seed products</h1>
+    <main className="py-8">
+      <div className="mx-auto max-w-5xl px-4">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Catalog
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold">Seed products</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Create dummy products for testing. Max 5000 per request.
+            </p>
+          </div>
           <a
             href="/products"
-            className="text-sm underline-offset-4 hover:underline"
+            className="text-sm font-medium underline-offset-4 hover:underline"
           >
             Back
           </a>
         </div>
 
-        <div className="mt-6 rounded-2xl border border-border bg-card p-4">
+        <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
           <p className="text-sm text-muted-foreground">
-            Create dummy products for testing. Max 5000 per request. For the
-            full 50,000 seed run: `cd backend` then `npm run seed`.
+            For the full 50,000 seed run: `cd backend` then `npm run seed`.
           </p>
 
           <form
@@ -59,11 +66,11 @@ export default function ProductSeedPage() {
               type="text"
               inputMode="numeric"
               {...register("count", { valueAsNumber: true })}
-              className="h-9 w-28 rounded-xl border border-border bg-background px-3 text-sm"
+              className="h-10 w-28 rounded-xl border border-border bg-background px-3 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
             />
             <button
               type="submit"
-              className="h-9 rounded-xl border border-border px-4 text-sm font-medium transition hover:bg-muted"
+              className="h-10 rounded-xl border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90"
               disabled={seedMutation.isPending}
             >
               {seedMutation.isPending ? "Seeding..." : "Seed"}
@@ -71,12 +78,14 @@ export default function ProductSeedPage() {
           </form>
 
           {errors.count?.message && (
-            <p className="mt-2 text-sm text-destructive">
+            <p className="mt-2 text-sm text-foreground font-medium">
               {errors.count.message}
             </p>
           )}
           {submitError && (
-            <p className="mt-2 text-sm text-destructive">{submitError}</p>
+            <p className="mt-2 text-sm text-foreground font-medium">
+              {submitError}
+            </p>
           )}
 
           {seedMutation.isSuccess && (

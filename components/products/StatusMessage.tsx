@@ -10,7 +10,7 @@ export default function StatusMessage({
   className,
 }: StatusMessageProps) {
   const textClass =
-    variant === "error" ? "text-destructive" : "text-muted-foreground"
+    variant === "error" ? "text-foreground font-medium" : "text-muted-foreground"
 
   return <p className={`text-sm ${textClass} ${className || ""}`}>{message}</p>
 }

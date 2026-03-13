@@ -33,26 +33,30 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <main className="py-4">
+      <main className="py-8">
         <p className="text-sm text-muted-foreground">Loading profile...</p>
       </main>
     )
   }
 
   return (
-    <main className="py-4">
-      <div className="mx-auto max-w-3xl">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Profile</h1>
+    <main className="py-8">
+      <div className="mx-auto max-w-5xl px-4">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Account
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold">Profile</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Update your name or password. Email cannot be changed.
+            </p>
+          </div>
         </div>
 
-        <div className="mt-6 rounded-2xl border border-border bg-card p-5">
-          <p className="text-sm text-muted-foreground">
-            Update your name or password. Email cannot be changed.
-          </p>
-
+        <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
           <form
-            className="mt-5 space-y-4"
+            className="space-y-5"
             onSubmit={handleSubmit((values) => {
               setSubmitError(null)
               setSuccessMessage(null)
@@ -76,7 +80,7 @@ export default function ProfilePage() {
               })
             })}
           >
-            <div>
+            <div className="rounded-xl border border-border/60 bg-muted/30 p-4">
               <label className="text-xs font-medium text-muted-foreground">
                 Email
               </label>
@@ -84,11 +88,11 @@ export default function ProfilePage() {
                 type="email"
                 value={user.email}
                 disabled
-                className="mt-2 h-10 w-full rounded-xl border border-border bg-muted px-3 text-sm text-muted-foreground"
+                className="mt-2 h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-muted-foreground"
               />
             </div>
 
-            <div>
+            <div className="rounded-xl border border-border/60 bg-background p-4">
               <label className="text-xs font-medium text-muted-foreground">
                 Name
               </label>
@@ -98,16 +102,16 @@ export default function ProfilePage() {
                   setValueAs: (value) =>
                     typeof value === "string" ? value.trim() : value,
                 })}
-                className="mt-2 h-10 w-full rounded-xl border border-border bg-background px-3 text-sm"
+                className="mt-2 h-10 w-full rounded-xl border border-border bg-background px-3 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
               />
               {errors.name?.message && (
-                <p className="mt-2 text-sm text-destructive">
+                <p className="mt-2 text-sm text-foreground font-medium">
                   {errors.name.message}
                 </p>
               )}
             </div>
 
-            <div>
+            <div className="rounded-xl border border-border/60 bg-background p-4">
               <label className="text-xs font-medium text-muted-foreground">
                 New password
               </label>
@@ -117,21 +121,25 @@ export default function ProfilePage() {
                   setValueAs: (value) =>
                     typeof value === "string" ? value.trim() : value,
                 })}
-                className="mt-2 h-10 w-full rounded-xl border border-border bg-background px-3 text-sm"
+                className="mt-2 h-10 w-full rounded-xl border border-border bg-background px-3 text-sm transition outline-none focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
               />
               {errors.password?.message && (
-                <p className="mt-2 text-sm text-destructive">
+                <p className="mt-2 text-sm text-foreground font-medium">
                   {errors.password.message}
                 </p>
               )}
             </div>
 
             {errors.root?.message && (
-              <p className="text-sm text-destructive">{errors.root.message}</p>
+              <p className="text-sm text-foreground font-medium">
+                {errors.root.message}
+              </p>
             )}
 
             {submitError && (
-              <p className="text-sm text-destructive">{submitError}</p>
+              <p className="text-sm text-foreground font-medium">
+                {submitError}
+              </p>
             )}
 
             {successMessage && (
@@ -141,7 +149,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="submit"
-                className="h-10 rounded-xl border border-border px-4 text-sm font-medium transition hover:bg-muted"
+                className="h-10 rounded-xl border border-foreground bg-foreground px-4 text-sm font-medium text-background transition hover:bg-foreground/90"
                 disabled={updateMutation.isPending}
               >
                 {updateMutation.isPending ? "Saving..." : "Save changes"}

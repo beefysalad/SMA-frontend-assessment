@@ -81,7 +81,7 @@ export default function AppSidebar() {
     <>
       <SidebarHeader>
         <div className="flex items-center gap-3 px-2 py-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sidebar-primary text-xs font-semibold text-sidebar-primary-foreground">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-muted text-xs font-semibold text-foreground">
             PS
           </div>
           <div className="group-data-[collapsible=icon]:hidden">
@@ -158,7 +158,9 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
         {logoutError && (
-          <p className="px-2 pb-2 text-xs text-destructive">{logoutError}</p>
+          <p className="px-2 pb-2 text-xs text-foreground font-medium">
+            {logoutError}
+          </p>
         )}
       </SidebarFooter>
     </>
