@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils";
 import { AppProviders } from "@/app/providers"
 
@@ -28,7 +29,9 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <AppProviders>{children}</AppProviders>
+          <TooltipProvider>
+            <AppProviders>{children}</AppProviders>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
