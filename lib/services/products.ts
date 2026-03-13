@@ -62,3 +62,10 @@ export async function deleteProduct(id: number) {
   )
   return response.data
 }
+
+export async function seedProducts(count = 100) {
+  const response = await api.post<{ message: string }>(`/products/seed`, {
+    count,
+  })
+  return response.data
+}

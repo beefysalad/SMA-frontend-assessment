@@ -8,6 +8,7 @@ import { useLogoutMutation, getAuthErrorMessage } from "@/hooks/useAuthMutations
 const items = [
   { href: "/products", label: "Products" },
   { href: "/products/new", label: "Add product" },
+  { href: "/products/seed", label: "Seed products" },
 ]
 
 export default function SidebarNav() {

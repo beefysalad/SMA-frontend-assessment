@@ -4,6 +4,7 @@ import {
   deleteProduct,
   getProductById,
   getProducts,
+  seedProducts,
   updateProduct,
   type PaginatedProducts,
   type Product,
@@ -66,6 +67,16 @@ export function useDeleteProductMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: number) => deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] })
+    },
+  })
+}
+
+export function useSeedProductsMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (count: number) => seedProducts(count),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] })
     },
